@@ -1,18 +1,31 @@
 <template>
-  <hello-world />
+  <template
+    v-for="(_, index) in bluetoothStore.$state.connections"
+    :key="index"
+  >
+    <power-control :control-id="index"></power-control>
+  </template>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
 // Components
-import HelloWorld from "../components/HelloWorld.vue";
+import PowerControl from "@/components/PowerControl.vue";
+import { useBluetoothStore } from "@/stores/bluetooth";
 
 export default defineComponent({
   name: "HomeView",
 
   components: {
-    HelloWorld,
+    PowerControl,
+  },
+
+  setup() {
+    const bluetoothStore = useBluetoothStore();
+    return {
+      bluetoothStore,
+    };
   },
 });
 </script>
