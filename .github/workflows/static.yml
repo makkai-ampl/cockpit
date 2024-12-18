@@ -21,9 +21,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  NODE_ENV: production
-
 jobs:
   # Single deploy job since we're just deploying
   deploy:
@@ -47,6 +44,8 @@ jobs:
         run: pnpm install
       - name: Build application
         run: pnpm build
+        env:
+          NODE_ENV: production
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
