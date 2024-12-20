@@ -14,7 +14,7 @@ export const useBluetoothStore = defineStore("bluetooth", () => {
       service: "19b10000-e8f2-537e-4f6c-d104768a1215",
       characteristics: {
         power: "19b10001-e8f2-537e-4f6c-d104768a1216",
-        // direction: ""
+        direction: "19b10001-e8f2-537e-4f6c-d104768a1217",
       },
     },
   ]);
@@ -65,7 +65,12 @@ export const useBluetoothStore = defineStore("bluetooth", () => {
               connectionInfo[0].characteristics.power
             ),
           },
-          direction: undefined,
+          direction: {
+            uuid: connectionInfo[0].characteristics.direction,
+            instance: await connection.service.getCharacteristic(
+              connectionInfo[0].characteristics.direction
+            ),
+          },
         };
         connection.characteristics = characteristics;
       }
@@ -84,7 +89,20 @@ export const useBluetoothStore = defineStore("bluetooth", () => {
       await connections[serviceId].characteristics?.power?.instance?.writeValue(
         valueArray
       );
-      console.log("succeeded");
+      console.log("send power succeeded");
+    } catch (error) {
+      console.log("Failed to write.");
+    }
+  }
+
+  async function writeDirection(serviceId: number, value: number) {
+    const valueArray = new Uint8Array(1);
+    valueArray[0] = value;
+    try {
+      await connections[
+        serviceId
+      ].characteristics?.direction?.instance?.writeValue(valueArray);
+      console.log("send direction succeeded");
     } catch (error) {
       console.log("Failed to write.");
     }
@@ -95,5 +113,6 @@ export const useBluetoothStore = defineStore("bluetooth", () => {
     connections,
     connectDevice,
     writePower,
+    writeDirection,
   };
 });

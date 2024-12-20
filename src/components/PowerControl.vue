@@ -4,18 +4,19 @@
       v-model="power"
       step="1"
       thumb-label
-      v-on:end="sendValue()"
+      v-on:end="sendPower()"
     ></v-slider>
     <v-slider
       v-model="direction"
-      :min="-1"
-      :max="1"
+      :min="0"
+      :max="2"
       step="1"
       thumb-label
       track-fill-color="transparent"
+      v-on:end="sendDirection()"
     >
       <template v-slot:thumb-label="{ modelValue }">
-        {{ directionLabel[modelValue + 1] }}
+        {{ directionLabel[modelValue] }}
       </template>
     </v-slider>
   </v-card>
@@ -33,11 +34,17 @@ export default defineComponent({
     const directionLabel = ["In", "N", "Out"];
     const bluetoothStore = useBluetoothStore();
     const power = ref(0);
-    const direction = ref(0);
+    const direction = ref(1);
 
-    function sendValue() {
+    function sendPower() {
       if (props.controlId !== undefined) {
         bluetoothStore.writePower(props.controlId, power.value);
+      }
+    }
+
+    function sendDirection() {
+      if (props.controlId !== undefined) {
+        bluetoothStore.writeDirection(props.controlId, direction.value);
       }
     }
 
@@ -46,7 +53,8 @@ export default defineComponent({
       direction,
       directionLabel,
       bluetoothStore,
-      sendValue,
+      sendPower,
+      sendDirection,
     };
   },
 });
