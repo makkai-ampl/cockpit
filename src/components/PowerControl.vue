@@ -45,6 +45,8 @@ export default defineComponent({
     function sendDirection() {
       if (props.controlId !== undefined) {
         bluetoothStore.writeDirection(props.controlId, direction.value);
+        power.value = 0;
+        bluetoothStore.writePower(props.controlId, power.value);
       }
     }
 
