@@ -4,7 +4,7 @@
       v-model="power"
       step="1"
       thumb-label
-      v-on:end="sendPower()"
+      @update:model-value="sendPower()"
     ></v-slider>
     <v-slider
       v-model="direction"
@@ -37,6 +37,9 @@ export default defineComponent({
     const direction = ref(1);
 
     function sendPower() {
+      console.log(
+        `Sending power: ${power.value} to control ID: ${props.controlId}`
+      );
       if (props.controlId !== undefined) {
         bluetoothStore.writePower(props.controlId, power.value);
       }
